@@ -11,7 +11,7 @@ local delay_1min = 1*60*1000
 local looper = 10
 local bat_v = 50
 local pwm_max = 2000
-local Q_M_PWM_MAX = Parameter()
+local Q_M_PWM_MAX = Parameter() -- Accède et modifie ce paramètre
 Q_M_PWM_MAX:init('Q_M_PWM_MAX')      
 
 
