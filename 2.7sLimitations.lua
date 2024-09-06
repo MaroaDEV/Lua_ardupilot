@@ -1,10 +1,10 @@
 -- Ce script permet une limitation dynamique des niveaux de gaz
 
 -- Définir les canaux des servos pour les moteurs 5, 6, 7 et 8, l'argument doit être la fonction du servo et non son channel
-local MOTOR5_FUN = 5
-local MOTOR6_FUN = 6  
-local MOTOR7_FUN = 7  
-local MOTOR8_FUN = 8  
+local MOTOR5_FUN = 33
+local MOTOR6_FUN = 34 
+local MOTOR7_FUN = 35 
+local MOTOR8_FUN = 36 
 
 local PWM_sum = 0
 local delay_1min = 1*60*1000 
@@ -30,7 +30,7 @@ function state_safe()
    bat_v = battery:voltage(0)
    pwm_max = 2000
    pwm_sum = SRV_Channels:get_output_pwm(MOTOR5_FUN) + SRV_Channels:get_output_pwm(MOTOR6_FUN) + SRV_Channels:get_output_pwm(MOTOR7_FUN) + SRV_Channels:get_output_pwm(MOTOR8_FUN)
-   if quadplane:in_vtol_mode() or pwm_sum > 4100 then 
+   if quadplane:in_vtol_mode() or pwm_sum > 4010 then 
         return state_vtol, delay_1min -- on ne veut pas changer la limitation pendant que l'utilisation des moteurs
    end
    if bat_v > 50.4 then 
