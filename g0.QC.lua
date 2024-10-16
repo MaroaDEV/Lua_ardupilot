@@ -6,7 +6,7 @@ local MOTOR5_CHANNEL = 5
 local MOTOR6_CHANNEL = 6  
 local MOTOR7_CHANNEL = 7  
 local MOTOR8_CHANNEL = 8  
-
+local value = 0
 local pwm_out = 0
 
 local last_state = 0
@@ -20,7 +20,12 @@ function state_init()
 end
 
 function state_w8_input()
-
+    
+    if not arming:is_armed() then
+        return state_w8_input, 1000
+    end
+    value = 0
+    pwm_out = 0
     seq_seg = 0
     gcs:send_text(0, 'g0.input needed on right C1/C2')
 
@@ -40,7 +45,9 @@ function state_w8_input()
 end
 
 function state_w8_input_confirm()
-
+    if not arming:is_armed() then
+        return state_w8_input, 1000
+    end
     if rc:get_pwm(1) > 1900 then
         return state_1, 1000
     end
@@ -48,14 +55,16 @@ function state_w8_input_confirm()
         return state_2, 1000
     end
     if rc:get_pwm(2) < 1100 then
-        return state_4, 1000
+        return state_3, 1000
     end
     return state_w8_input, 500 
 end
 
 
-function state_1()
-    
+function state_1() -- test mot A B C D at 60% 3 min
+    if not arming:is_armed() then
+        return state_w8_input, 1000
+    end
     if rc:get_pwm(2) > 1900 then
         notify:play_tune('MFT240L8 G G G G C C C C')
         gcs:send_text(0, 'RC2 asked exit')
@@ -101,16 +110,21 @@ function state_1()
     return state_1, 1000
 end
 
-function state_2()
-    
+function state_2() -- test mot main at 60% 3 min
+    if not arming:is_armed() then
+        return state_w8_input, 1000
+    end
     if rc:get_pwm(2) > 1900 then
         notify:play_tune('MFT240L8 G G G G C C C C')
         gcs:send_text(0, 'RC2 asked exit')
         return state_w8_input, 2500 
     end
-    if seq_seg == 0 or seq_seg == 5 then --from 0 to 10
+    if seq_seg == 0 then --from 0 to 10
         gcs:send_text(0, 'Squence 2')
         notify:play_tune('MFT240L8 C D D C D E F G')
+    end
+    if seq_seg > 0 and seq_seg < 10 then --from 0 to 10
+        notify:play_tune('MFT240L8 C')
     end
     if seq_seg > 10 and seq_seg <= 20 then --from 11 to 20
         pwm_out = (seq_seg-10)*60+1000
@@ -136,7 +150,10 @@ function state_2()
     return state_2, 1000
 end
 
-function state_3()
+function state_3() --test desync
+    if not arming:is_armed() then
+        return state_w8_input, 1000
+    end
     if rc:get_pwm(2) > 1900 then
         notify:play_tune('MFT240L8 G G G G C C C C')
         
@@ -144,14 +161,17 @@ function state_3()
         gcs:send_text(0, 'RC2 asked exit')
         return state_w8_input, 2500 
     end
-    if seq_seg == 0 or seq_seg == 5 then --from 0 to 10
+    if seq_seg == 0 then --from 0 to 10
         gcs:send_text(0, 'Squence 3')
         notify:play_tune('MFT240L8 C D E C D E F G')
         vehicle:set_mode(17)
     end
+    if seq_seg > 0 and seq_seg < 10 then --from 0 to 10
+        notify:play_tune('MFT240L8 C')
+    end
     if seq_seg > 10 and seq_seg <= 20 then --from 11 to 20
-        pwm_out = (seq_seg-10)*60+1000
-        RC_Channel_ud:set_override(PWM)(MOTOR3_CHANNEL, pwm_out, 2000)  -- 2000 ms de timeout
+        value = (seq_seg-10)*0.06
+        vehicle:set_steering_and_throttle(0,value)  -- 2000 ms de timeout
     end
     if seq_seg > 20 and seq_seg <= 200 then --from 21 to 200
         pwm_out = 1600
