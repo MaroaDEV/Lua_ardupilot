@@ -1,21 +1,17 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\alexi\\Desktop\\Lua_ardupilot\\",
+  "WorkspaceRootPath": "C:\\Users\\Test\\source\\repos\\AlexisMGL\\Lua_ardupilot\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\alexi\\Desktop\\Lua_ardupilot\\g0.QC.lua||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:g0.QC.lua||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Test\\source\\repos\\AlexisMGL\\Lua_ardupilot\\3.LATO.lua||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:3.LATO.lua||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\alexi\\Desktop\\Lua_ardupilot\\misc.tune.lua||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:misc.tune.lua||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\alexi\\Desktop\\Lua_ardupilot\\1.EmergencyMotorStop.lua||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Test\\source\\repos\\AlexisMGL\\Lua_ardupilot\\1.EmergencyMotorStop.lua||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:1.EmergencyMotorStop.lua||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\alexi\\Desktop\\Lua_ardupilot\\2.7sLimitations.lua||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Test\\source\\repos\\AlexisMGL\\Lua_ardupilot\\2.7sLimitations.lua||{3B902123-F8A7-4915-9F01-361F908088D0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:2.7sLimitations.lua||{3B902123-F8A7-4915-9F01-361F908088D0}"
     }
   ],
@@ -26,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -34,52 +30,43 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "misc.tune.lua",
-              "DocumentMoniker": "C:\\Users\\alexi\\Desktop\\Lua_ardupilot\\misc.tune.lua",
-              "RelativeDocumentMoniker": "misc.tune.lua",
-              "ToolTip": "C:\\Users\\alexi\\Desktop\\Lua_ardupilot\\misc.tune.lua",
-              "RelativeToolTip": "misc.tune.lua",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAADAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-09-30T10:34:58.654Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "g0.QC.lua",
-              "DocumentMoniker": "C:\\Users\\alexi\\Desktop\\Lua_ardupilot\\g0.QC.lua",
-              "RelativeDocumentMoniker": "g0.QC.lua",
-              "ToolTip": "C:\\Users\\alexi\\Desktop\\Lua_ardupilot\\g0.QC.lua",
-              "RelativeToolTip": "g0.QC.lua",
-              "ViewState": "AQIAAJUAAAAAAAAAAAAAAKwAAAAgAAAA",
+              "Title": "3.LATO.lua",
+              "DocumentMoniker": "C:\\Users\\Test\\source\\repos\\AlexisMGL\\Lua_ardupilot\\3.LATO.lua",
+              "RelativeDocumentMoniker": "3.LATO.lua",
+              "ToolTip": "C:\\Users\\Test\\source\\repos\\AlexisMGL\\Lua_ardupilot\\3.LATO.lua",
+              "RelativeToolTip": "3.LATO.lua",
+              "ViewState": "AQIAAIQAAAAAAAAAAAAAwKwAAAA+AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-09-30T08:52:33.109Z",
+              "WhenOpened": "2024-10-16T05:37:23.642Z",
               "EditorCaption": ""
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "1.EmergencyMotorStop.lua",
-              "DocumentMoniker": "C:\\Users\\alexi\\Desktop\\Lua_ardupilot\\1.EmergencyMotorStop.lua",
+              "DocumentMoniker": "C:\\Users\\Test\\source\\repos\\AlexisMGL\\Lua_ardupilot\\1.EmergencyMotorStop.lua",
               "RelativeDocumentMoniker": "1.EmergencyMotorStop.lua",
-              "ToolTip": "C:\\Users\\alexi\\Desktop\\Lua_ardupilot\\1.EmergencyMotorStop.lua",
+              "ToolTip": "C:\\Users\\Test\\source\\repos\\AlexisMGL\\Lua_ardupilot\\1.EmergencyMotorStop.lua",
               "RelativeToolTip": "1.EmergencyMotorStop.lua",
-              "ViewState": "AQIAAAMAAAAAAAAAAIBJwCoAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAC4AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2024-09-06T07:41:05.5Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "2.7sLimitations.lua",
-              "DocumentMoniker": "C:\\Users\\alexi\\Desktop\\Lua_ardupilot\\2.7sLimitations.lua",
+              "DocumentMoniker": "C:\\Users\\Test\\source\\repos\\AlexisMGL\\Lua_ardupilot\\2.7sLimitations.lua",
               "RelativeDocumentMoniker": "2.7sLimitations.lua",
-              "ToolTip": "C:\\Users\\alexi\\Desktop\\Lua_ardupilot\\2.7sLimitations.lua",
+              "ToolTip": "C:\\Users\\Test\\source\\repos\\AlexisMGL\\Lua_ardupilot\\2.7sLimitations.lua",
               "RelativeToolTip": "2.7sLimitations.lua",
-              "ViewState": "AQIAABgAAAAAAAAAAIBJwDAAAAA2AAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABgAAABrAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2024-09-06T06:40:17.726Z",
               "EditorCaption": ""
