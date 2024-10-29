@@ -14,10 +14,10 @@ local last_button_state
 
 
 -- Définir les canaux des servos pour les moteurs 5, 6, 7 et 8
-local MOTOR5_CHANNEL = 5
-local MOTOR6_CHANNEL = 6  
-local MOTOR7_CHANNEL = 7  
-local MOTOR8_CHANNEL = 8  
+local MOTOR5_CHANNEL = 4
+local MOTOR6_CHANNEL = 5  
+local MOTOR7_CHANNEL = 6  
+local MOTOR8_CHANNEL = 7  
 
 local loop_count = 0
 

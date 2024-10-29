@@ -25,10 +25,10 @@ end
 function state_para()
 
     -- Définir les valeurs PWM des canaux des servos pour les moteurs 5, 6, 7 et 8 à 0
-    SRV_Channels:set_output_pwm_chan_timeout(MOTOR5_CHANNEL, 1000, 2000)  -- 2000 ms de timeout
-    SRV_Channels:set_output_pwm_chan_timeout(MOTOR6_CHANNEL, 1000, 2000)  -- 2000 ms de timeout
-    SRV_Channels:set_output_pwm_chan_timeout(MOTOR7_CHANNEL, 1000, 2000)  -- 2000 ms de timeout
-    SRV_Channels:set_output_pwm_chan_timeout(MOTOR8_CHANNEL, 1000, 2000)  -- 2000 ms de timeout
+    SRV_Channels:set_output_pwm_chan_timeout(MOTOR5_CHANNEL, 1000, 700)  
+    SRV_Channels:set_output_pwm_chan_timeout(MOTOR6_CHANNEL, 1000, 700)  
+    SRV_Channels:set_output_pwm_chan_timeout(MOTOR7_CHANNEL, 1000, 700)  
+    SRV_Channels:set_output_pwm_chan_timeout(MOTOR8_CHANNEL, 1000, 700)  
 
     if last_state == 0 then
         -- Envoyer un message de confirmation
