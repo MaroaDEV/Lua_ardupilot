@@ -36,17 +36,7 @@ function parachute_1()
     gcs:send_text(0, "Free fall")
     SRV_Channels:set_output_pwm_chan_timeout(MOTOR3_CHANNEL, 1000, 6000)  -- 6s de timeout
     
-    return parachute_2, 3000
-end
-
-function parachute_2()
-
-   if SRV_Channels:get_output_pwm(SERVO_FUNCTION) < 1999 then
-       gcs:send_text(0, "Script release")
-       SRV_Channels:set_output_pwm(SERVO_FUNCTION, 2000)
-   end
-
-   return final()
+    return final, 3000
 end
 
 function final()
