@@ -8,15 +8,15 @@ local last_state = 0
 
 function state_init()
    gcs:send_text(6, '0.LuaTest script initiated')
-   return state_safe, 5500
+   return state_safe, 10000
 end
 
 function state_safe()
    last_state = 0
    gcs:send_text(0, 'C3 PWM ='..SRV_Channels:get_output_pwm(SERVO_FUNCTION))
-   gcs:send_text(0, 'asp0 ='..SRV_Channels:get_raw_airspeed(0))
-   gcs:send_text(0, 'asp1 ='..SRV_Channels:get_raw_airspeed(1))
-   gcs:send_text(0, 'temp1 ='..SRV_Channels:get_temperature(1))
+   gcs:send_text(0, 'asp0 ='..airspeed:get_raw_airspeed(0))
+   gcs:send_text(0, 'asp1 ='..airspeed:get_raw_airspeed(1))
+   gcs:send_text(0, 'temp1 ='..airspeed:get_temperature(1))
    return state_safe, 2000
 end
 
