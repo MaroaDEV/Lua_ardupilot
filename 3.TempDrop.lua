@@ -21,8 +21,6 @@ function state_read()
    T_now = airspeed:get_temperature(1)
    t_now = millis()
    delta = T_now - T_old
-   gcs:send_text(0, 'temp1 ='..airspeed:get_temperature(1))
-   gcs:send_text(0, 'delta ='..delta)
    T_old = T_now
    if delta < (-0.1) then
        return append_and_fw()
