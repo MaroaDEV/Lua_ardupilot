@@ -41,7 +41,6 @@ function state_read()
         end
     end
     
-    gcs:send_text(0, 'list size : '.. #temp_list)
     -- Revenir à l'état read après 2 secondes
     return state_read, 2000
 end
