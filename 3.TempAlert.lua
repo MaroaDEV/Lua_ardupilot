@@ -8,14 +8,19 @@ local T_now = 0
 
 -- Fonction d'initialisation
 function state_init()
-    gcs:send_text(6, 'TempAlert Dummy Script Initiated')
+    gcs:send_text(6, '3.TempAlert Script Initiated')
     return state_read, 2000 -- Appel de state_read toutes les 2 secondes
 end
 
 -- Fonction pour lire la température et effectuer le test
 function state_read()
     -- Lire la température actuelle
-    T_now = airspeed:get_raw_airspeed(1)
+    T_now = airspeed:get_temperature(1)
+
+    if T_now == nil then
+        gcs:send_text(0, 'Warning: Temperature reading is nil.')
+        return state_read, 2000 -- Retourner à l'état read après 2 secondes sans ajouter de mesure
+    end
     
     -- Ajouter la nouvelle température à la liste
     table.insert(temp_list, T_now)
@@ -29,14 +34,14 @@ function state_read()
     if #temp_list == max_size then
         -- Calculer la température maximale et minimale dans la liste
         local T_max = math.max(table.unpack(temp_list))
-        local T_min = math.min(table.unpack(temp_list))
         
         -- Vérifier si max - min >= 2.25
-        if math.abs(T_max - T_min) >= 2.25 then
-            gcs:send_text(6, 'ALERT: High Temperature Variation Detected')
+        if T_max - T_now >= 2.25 then
+            gcs:send_text(0, 'ALERT: High Temperature Drop')
         end
     end
     
+    gcs:send_text(0, 'list size : '.. #temp_list)
     -- Revenir à l'état read après 2 secondes
     return state_read, 2000
 end
