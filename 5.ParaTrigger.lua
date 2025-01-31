@@ -1,6 +1,8 @@
 -- Ce déclenche le parachute dans certains scénarios de vols dégradés
 
 -- Initialisation des variables
+local SERVO_FUNCTION_PARA = 27 -- 27 est assigné au parachute
+
 local delay = 2000
 
 local thr = -1
@@ -29,6 +31,11 @@ end
 -- Fonction pour lire les champs
 function state_read()
 
+
+    if SRV_Channels:get_output_pwm(SERVO_FUNCTION_PARA) == 2000 then
+        return
+    end    
+
     local hagl = ahrs:get_hagl()
 
     if hagl == nil then
@@ -36,8 +43,17 @@ function state_read()
         return state_read, 10000
     end
 
-    if (not vehicle:get_likely_flying()) or (hagl < 30) or (not ahrs:initialised()) then
+    if (not vehicle:get_likely_flying()) or (not ahrs:initialised()) then
         return state_read,2000
+    end
+
+    if hagl == nil then
+        gcs:send_text(0, 'invalid hagl')
+        return state_read, 10000
+    end
+
+    if hagl < 20 then
+        return state_read, 10000
     end
 
     -- State VTOL si pwm_sum > 4010 et si is_flying_vtol
@@ -64,12 +80,14 @@ end
 
 
 function state_vtol()
-    delay = 2000
+    delay = 100
     sinkrate = vehicle:get_sinkrate()
 
     if sinkrate > 7 then
         c_vtol = c_vtol + 1
         delay = 100
+    else 
+        c_vtol = 0
     end
 
     logger:write('PARA','state,sk,thr,cur,alt,t_alt,c_mot,c_alt,c_vtol','ifffffiii',2,sinkrate,0,0,alt,0,0,0,c_vtol)
@@ -87,7 +105,7 @@ function state_cruise()
         return state_read, 10000
     end
 
-    delay = 2000
+    delay = 500
 
     if alt < (t_alt - 60) then
         c_alt = c_alt+1
@@ -96,7 +114,7 @@ function state_cruise()
         c_alt = 0
     end
 
-    if thr > 0.98 and cur < 8 then
+    if thr > 95 and cur < 8 then
         c_motorloss = c_motorloss + 1
         delay = 100
     else 
