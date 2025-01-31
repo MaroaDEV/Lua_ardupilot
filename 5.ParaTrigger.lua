@@ -29,7 +29,14 @@ end
 -- Fonction pour lire les champs
 function state_read()
 
-    if (not vehicle:get_likely_flying()) or (not (ahrs:get_hagl() > 30)) or (not ahrs:initialised()) then
+    local hagl = ahrs:get_hagl()
+
+    if hagl == nil then
+        gcs:send_text(0, 'invalid hagl')
+        return state_read, 10000
+    end
+
+    if (not vehicle:get_likely_flying()) or (hagl < 30) or (not ahrs:initialised()) then
         return state_read,2000
     end
 
@@ -74,6 +81,12 @@ function state_cruise()
     cur = battery:current_amps(0)
     alt = vehicle:get_height()
     t_alt = vehicle:get_hdem()
+
+    if thr == nil or thr == -1 or cur == nil or cur == -1 or alt == nil or alt == -1 or t_alt == nil or t_alt == -1 then
+        gcs:send_text(0, 'invalid input: ' .. ((thr == nil or thr == -1) and 'thr' or (cur == nil or cur == -1) and 'cur' or (alt == nil or alt == -1) and 'alt' or 't_alt'))
+        return state_read, 10000
+    end
+
     delay = 2000
 
     if alt < (t_alt - 60) then
