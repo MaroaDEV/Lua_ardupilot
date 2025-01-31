@@ -57,15 +57,16 @@ end
 
 
 function state_vtol()
-
+    delay = 2000
     sinkrate = vehicle:get_sinkrate()
 
     if sinkrate > 7 then
         c_vtol = c_vtol + 1
+        delay = 100
     end
 
     logger:write('PARA','state,sk,thr,cur,alt,t_alt,c_mot,c_alt,c_vtol','ifffffiii',2,sinkrate,0,0,alt,0,0,0,c_vtol)
-    return state_read, 3000
+    return state_read, delay
 end
 
 function state_cruise()
