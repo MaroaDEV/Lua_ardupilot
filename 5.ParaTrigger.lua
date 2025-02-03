@@ -2,6 +2,7 @@
 
 -- Initialisation des variables
 local SERVO_FUNCTION_PARA = 27 -- 27 est assigné au parachute
+local SERVO_PARA_CHANNEL = 12
 
 local delay = 2000
 
@@ -38,12 +39,8 @@ function state_read()
 
     local hagl = ahrs:get_hagl()
 
-    if hagl == nil then
-        gcs:send_text(0, 'invalid hagl')
-        return state_read, 10000
-    end
 
-    if (not vehicle:get_likely_flying()) or (not ahrs:initialised()) then
+    if (not vehicle:get_likely_flying()) or (not ahrs:initialised()) or (not arming:is_armed()) then
         return state_read,2000
     end
 
@@ -59,6 +56,12 @@ function state_read()
     -- State VTOL si pwm_sum > 4010 et si is_flying_vtol
     local pwm_sum = SRV_Channels:get_output_pwm(MOTOR5_FUN) + SRV_Channels:get_output_pwm(MOTOR6_FUN) + SRV_Channels:get_output_pwm(MOTOR7_FUN) + SRV_Channels:get_output_pwm(MOTOR8_FUN)
     
+    if c_alt > 20 or c_motorloss > 20 or c_vtol > 7 then
+        gcs:send_text(0, 'warning: Parachute')
+        para:release()
+        return
+    end
+
     if pwm_sum > 4010 and quadplane:in_vtol_mode() then
         c_motorloss = 0
         c_alt = 0
@@ -102,6 +105,8 @@ function state_cruise()
 
     if thr == nil or thr == -1 or cur == nil or cur == -1 or alt == nil or alt == -1 or t_alt == nil or t_alt == -1 then
         gcs:send_text(0, 'invalid input: ' .. ((thr == nil or thr == -1) and 'thr' or (cur == nil or cur == -1) and 'cur' or (alt == nil or alt == -1) and 'alt' or 't_alt'))
+        c_alt = 0
+        c_motorloss = 0
         return state_read, 10000
     end
 
