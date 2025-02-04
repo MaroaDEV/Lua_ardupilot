@@ -23,6 +23,44 @@ local MOTOR7_FUN = 35
 local MOTOR8_FUN = 36 
 local SERVO_FUN_FORWARD = 70
 
+local PARAM_TABLE_KEY = 0
+assert(param:add_table(PARAM_TABLE_KEY, "PARA_", 7), 'could not add param table')
+assert(param:add_param(PARAM_TABLE_KEY, 1,  'VTOL_SK', 6), 'could not add param1')
+assert(param:add_param(PARAM_TABLE_KEY, 2,  'VTOL_DS', 7), 'could not add param2')
+assert(param:add_param(PARAM_TABLE_KEY, 3,  'M_TH_HIGH', 1950), 'could not add param3')
+assert(param:add_param(PARAM_TABLE_KEY, 4,  'M_CUR_LOW', 8), 'could not add param4')
+assert(param:add_param(PARAM_TABLE_KEY, 5,  'M_DS', 20), 'could not add param5')
+assert(param:add_param(PARAM_TABLE_KEY, 6,  'ALT_DELTA', 60), 'could not add param6')
+assert(param:add_param(PARAM_TABLE_KEY, 7,  'ALT_DS', 20), 'could not add param7')
+
+local VTOL_SK = Parameter()
+VTOL_SK:init('PARA_VTOL_SK')
+local i_vtol_sk = VTOL_SK:get()
+
+local VTOL_DS = Parameter()
+VTOL_DS:init('PARA_VTOL_DS')
+local i_vtol_ds = VTOL_DS:get()
+
+local M_TH_HIGH = Parameter()
+M_TH_HIGH:init('PARA_M_TH_HIGH')
+local i_m_th_high = M_TH_HIGH:get()
+
+local M_CUR_LOW = Parameter()
+M_CUR_LOW:init('PARA_M_CUR_LOW')
+local i_m_cur_low = M_CUR_LOW:get()
+
+local M_DS = Parameter()
+M_DS:init('PARA_M_DS')
+local i_m_ds = M_DS:get()
+
+local ALT_DELTA = Parameter()
+ALT_DELTA:init('PARA_ALT_DELTA')
+local i_alt_delta = ALT_DELTA:get()
+
+local ALT_DS = Parameter()
+ALT_DS:init('PARA_ALT_DS')
+local i_alt_ds = ALT_DS:get()
+
 -- Fonction d'initialisation
 function state_init()
     gcs:send_text(6, '5. ParaTrigger script initiated')
@@ -56,9 +94,9 @@ function state_read()
     -- State VTOL si pwm_sum > 4010 et si is_flying_vtol
     local pwm_sum = SRV_Channels:get_output_pwm(MOTOR5_FUN) + SRV_Channels:get_output_pwm(MOTOR6_FUN) + SRV_Channels:get_output_pwm(MOTOR7_FUN) + SRV_Channels:get_output_pwm(MOTOR8_FUN)
     
-    if c_alt > 20 or c_motorloss > 20 or c_vtol > 7 then
-        gcs:send_text(0, 'warning: Parachute')
-        para:release()
+    if c_alt > i_alt_ds or c_motorloss > i_m_ds or c_vtol > i_vtol_ds then
+        gcs:send_text(0, 'warning: check para log')
+        -- Insert here para release fun
         return
     end
 
@@ -86,7 +124,7 @@ function state_vtol()
     delay = 100
     sinkrate = vehicle:get_sinkrate()
 
-    if sinkrate > 7 then
+    if sinkrate > i_vtol_sk then
         c_vtol = c_vtol + 1
         delay = 100
     else 
@@ -112,14 +150,14 @@ function state_cruise()
 
     delay = 500
 
-    if alt < (t_alt - 60) then
+    if alt < (t_alt - i_alt_delta) then
         c_alt = c_alt+1
         delay = 100
     else 
         c_alt = 0
     end
 
-    if thr > 95 and cur < 8 then
+    if thr > i_m_th_high and cur < i_m_cur_low then
         c_motorloss = c_motorloss + 1
         delay = 100
     else 
