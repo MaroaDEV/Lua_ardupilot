@@ -14,6 +14,9 @@ local alt = -1
 local t_alt = -1
 local c_alt = 0
 
+local xt = 0
+local c_xt = 0
+
 local sinkrate = 0
 local c_vtol = 0
 
@@ -24,7 +27,7 @@ local MOTOR8_FUN = 36
 local SERVO_FUN_FORWARD = 70
 
 local PARAM_TABLE_KEY = 0
-assert(param:add_table(PARAM_TABLE_KEY, "PARA_", 7), 'could not add param table')
+assert(param:add_table(PARAM_TABLE_KEY, "PARA_", 9), 'could not add param table')
 assert(param:add_param(PARAM_TABLE_KEY, 1,  'VTOL_SK', 6), 'could not add param1')
 assert(param:add_param(PARAM_TABLE_KEY, 2,  'VTOL_DS', 7), 'could not add param2')
 assert(param:add_param(PARAM_TABLE_KEY, 3,  'M_TH_HIGH', 1950), 'could not add param3')
@@ -32,6 +35,8 @@ assert(param:add_param(PARAM_TABLE_KEY, 4,  'M_CUR_LOW', 8), 'could not add para
 assert(param:add_param(PARAM_TABLE_KEY, 5,  'M_DS', 20), 'could not add param5')
 assert(param:add_param(PARAM_TABLE_KEY, 6,  'ALT_DELTA', 60), 'could not add param6')
 assert(param:add_param(PARAM_TABLE_KEY, 7,  'ALT_DS', 20), 'could not add param7')
+assert(param:add_param(PARAM_TABLE_KEY, 8,  'XT_M', 2000), 'could not add param8')
+assert(param:add_param(PARAM_TABLE_KEY, 9,  'XT_DS', 20), 'could not add param9')
 
 local VTOL_SK = Parameter()
 VTOL_SK:init('PARA_VTOL_SK')
@@ -61,6 +66,14 @@ local ALT_DS = Parameter()
 ALT_DS:init('PARA_ALT_DS')
 local i_alt_ds = ALT_DS:get()
 
+local XT_M = Parameter()
+XT_M:init('PARA_XT_M')
+local i_xt_m = XT_M:get()
+
+local XT_DS = Parameter()
+XT_DS:init('PARA_XT_DS')
+local i_xt_ds = XT_DS:get()
+
 -- Fonction d'initialisation
 function state_init()
     gcs:send_text(6, '5. ParaTrigger script initiated')
@@ -71,7 +84,7 @@ end
 function state_read()
 
 
-    if SRV_Channels:get_output_pwm(SERVO_FUNCTION_PARA) == 2000 then
+    if SRV_Channels:get_output_pwm(SERVO_FUNCTION_PARA) == 2000 or para:released() then
         return
     end    
 
@@ -97,13 +110,14 @@ function state_read()
     if c_alt > i_alt_ds or c_motorloss > i_m_ds or c_vtol > i_vtol_ds then
         gcs:send_text(0, 'warning: check para log')
         -- Insert here para release fun
-        para:release()
+        -- para:release()
         return
     end
 
     if pwm_sum > 4010 and quadplane:in_vtol_mode() then
         c_motorloss = 0
         c_alt = 0
+        c_xt = 0
         return state_vtol()
     end
 
@@ -116,6 +130,7 @@ function state_read()
     c_motorloss = 0
     c_alt = 0
     c_vtol = 0
+    c_xt = 0
 
     return state_read, 2000
 end
@@ -123,7 +138,14 @@ end
 
 function state_vtol()
     delay = 100
-    sinkrate = vehicle:get_sinkrate()
+    
+    local vel = ahrs:get_velocity_NED()
+
+    if vel then
+        sinkrate = vel:z()
+    else 
+        sinkrate = 0
+    end
 
     if sinkrate > i_vtol_sk then
         c_vtol = c_vtol + 1
@@ -132,7 +154,7 @@ function state_vtol()
         c_vtol = 0
     end
 
-    logger:write('PARA','state,sk,thr,cur,alt,t_alt,c_mot,c_alt,c_vtol','ifffffiii',2,sinkrate,0,0,alt,0,0,0,c_vtol)
+    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_xt,c_alt,c_vtol','iffffffiiii',2,sinkrate,0,0,alt,0,0,0,0,0,c_vtol)
     return state_read, delay
 end
 
@@ -141,17 +163,19 @@ function state_cruise()
     cur = battery:current_amps(0)
     alt = vehicle:get_height()
     t_alt = vehicle:get_hdem()
+    xt = vehicle:get_wp_crosstrack_error_m()
 
-    if thr == nil or thr == -1 or cur == nil or cur == -1 or alt == nil or alt == -1 or t_alt == nil or t_alt == -1 then
-        gcs:send_text(0, 'invalid input: ' .. ((thr == nil or thr == -1) and 'thr' or (cur == nil or cur == -1) and 'cur' or (alt == nil or alt == -1) and 'alt' or 't_alt'))
+    if thr == nil or thr == -1 or cur == nil or cur == -1 or alt == nil or alt == -1 or t_alt == nil or t_alt == -1 or xt == nil then
+        gcs:send_text(0, 'invalid input: ' .. ((thr == nil or thr == -1) and 'thr' or (cur == nil or cur == -1) and 'cur' or (xt == nil) and 'xt'  or (alt == nil or alt == -1) and 'alt' or 't_alt'))
         c_alt = 0
         c_motorloss = 0
+        c_xt = 0
         return state_read, 10000
     end
 
     delay = 500
 
-    if alt < (t_alt - i_alt_delta) then
+    if math.abs(alt-t_alt) > i_alt_delta then
         c_alt = c_alt+1
         delay = 100
     else 
@@ -165,8 +189,14 @@ function state_cruise()
         c_motorloss = 0
     end
 
+    if math.abs(xt) > i_xt_m then
+        c_xt = c_xt+1
+    else
+        c_xt = 0
+    end
+
     -- logger:write('HE','thr(%),cur(A)','f,f',thr,cur)
-    logger:write('PARA','state,sk,thr,cur,alt,t_alt,c_mot,c_alt,c_vtol','ifffffiii',1,0,thr,cur,alt,t_alt,c_motorloss,c_alt,0)
+    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_xt,c_alt,c_vtol','iffffffiiii',1,0,thr,cur,alt,t_alt,xt,c_motorloss,c_alt,c_xt,0)
     return state_read, delay
 
 end
