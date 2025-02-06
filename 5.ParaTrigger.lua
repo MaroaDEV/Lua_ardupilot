@@ -79,7 +79,7 @@ function state_read()
 
 
     if (not vehicle:get_likely_flying()) or (not ahrs:initialised()) or (not arming:is_armed()) then
-        return state_read,2000
+        return state_read,10000
     end
 
     if hagl == nil then
@@ -87,8 +87,8 @@ function state_read()
         return state_read, 10000
     end
 
-    if hagl < 20 then
-        return state_read, 10000
+    if hagl < 30 then
+        return state_read, 1000
     end
 
     -- State VTOL si pwm_sum > 4010 et si is_flying_vtol
@@ -97,6 +97,7 @@ function state_read()
     if c_alt > i_alt_ds or c_motorloss > i_m_ds or c_vtol > i_vtol_ds then
         gcs:send_text(0, 'warning: check para log')
         -- Insert here para release fun
+        para:release()
         return
     end
 
