@@ -75,7 +75,7 @@ function state_read()
         return
     end    
 
-    local hagl = ahrs:get_hagl()
+    local hagl = terrain:height_above_terrain(true)
 
 
     if (not vehicle:get_likely_flying()) or (not ahrs:initialised()) or (not arming:is_armed()) then
