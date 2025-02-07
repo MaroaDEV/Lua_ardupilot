@@ -110,7 +110,7 @@ function state_read()
     if c_alt > i_alt_ds or c_motorloss > i_m_ds or c_vtol > i_vtol_ds then
         gcs:send_text(0, 'warning: check para log')
         -- Insert here para release fun
-        -- para:release()
+        -- no risk
         return
     end
 
@@ -191,6 +191,7 @@ function state_cruise()
 
     if math.abs(xt) > i_xt_m then
         c_xt = c_xt+1
+        delay = 100
     else
         c_xt = 0
     end
