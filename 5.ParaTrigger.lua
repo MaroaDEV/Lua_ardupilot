@@ -28,9 +28,9 @@ local SERVO_FUN_FORWARD = 70
 
 local PARAM_TABLE_KEY = 0
 assert(param:add_table(PARAM_TABLE_KEY, "PARA_", 9), 'could not add param table')
-assert(param:add_param(PARAM_TABLE_KEY, 1,  'VTOL_SK', 6), 'could not add param1')
+assert(param:add_param(PARAM_TABLE_KEY, 1,  'VTOL_SK', 5.5), 'could not add param1')
 assert(param:add_param(PARAM_TABLE_KEY, 2,  'VTOL_DS', 7), 'could not add param2')
-assert(param:add_param(PARAM_TABLE_KEY, 3,  'M_TH_HIGH', 1950), 'could not add param3')
+assert(param:add_param(PARAM_TABLE_KEY, 3,  'M_TH_HIGH', 95), 'could not add param3')
 assert(param:add_param(PARAM_TABLE_KEY, 4,  'M_CUR_LOW', 8), 'could not add param4')
 assert(param:add_param(PARAM_TABLE_KEY, 5,  'M_DS', 20), 'could not add param5')
 assert(param:add_param(PARAM_TABLE_KEY, 6,  'ALT_DELTA', 60), 'could not add param6')
@@ -107,10 +107,9 @@ function state_read()
     -- State VTOL si pwm_sum > 4010 et si is_flying_vtol
     local pwm_sum = SRV_Channels:get_output_pwm(MOTOR5_FUN) + SRV_Channels:get_output_pwm(MOTOR6_FUN) + SRV_Channels:get_output_pwm(MOTOR7_FUN) + SRV_Channels:get_output_pwm(MOTOR8_FUN)
     
-    if c_alt > i_alt_ds or c_motorloss > i_m_ds or c_vtol > i_vtol_ds then
-        gcs:send_text(0, 'warning: check para log')
-        -- Insert here para release fun
-        -- no risk
+    if c_alt > i_alt_ds or c_motorloss > i_m_ds or c_vtol > i_vtol_ds or c_xt > i_xt_ds then
+        gcs:send_text(0, 'Parachute Triggered')
+        para:release()
         return
     end
 
@@ -154,7 +153,7 @@ function state_vtol()
         c_vtol = 0
     end
 
-    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_xt,c_alt,c_vtol','iffffffiiii',2,sinkrate,0,0,alt,0,0,0,0,0,c_vtol)
+    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol','iffffffiiii',2,sinkrate,0,0,alt,0,0,0,0,0,c_vtol)
     return state_read, delay
 end
 
@@ -197,7 +196,7 @@ function state_cruise()
     end
 
     -- logger:write('HE','thr(%),cur(A)','f,f',thr,cur)
-    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_xt,c_alt,c_vtol','iffffffiiii',1,0,thr,cur,alt,t_alt,xt,c_motorloss,c_alt,c_xt,0)
+    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol','iffffffiiii',1,0,thr,cur,alt,t_alt,xt,c_motorloss,c_alt,c_xt,0)
     return state_read, delay
 
 end
