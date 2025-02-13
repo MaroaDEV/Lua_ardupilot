@@ -29,7 +29,7 @@ local SERVO_FUN_FORWARD = 70
 local PARAM_TABLE_KEY = 0
 assert(param:add_table(PARAM_TABLE_KEY, "PARA_", 9), 'could not add param table')
 assert(param:add_param(PARAM_TABLE_KEY, 1,  'VTOL_SK', 5.5), 'could not add param1')
-assert(param:add_param(PARAM_TABLE_KEY, 2,  'VTOL_DS', 7), 'could not add param2')
+assert(param:add_param(PARAM_TABLE_KEY, 2,  'VTOL_DS', 6), 'could not add param2')
 assert(param:add_param(PARAM_TABLE_KEY, 3,  'M_TH_HIGH', 95), 'could not add param3')
 assert(param:add_param(PARAM_TABLE_KEY, 4,  'M_CUR_LOW', 8), 'could not add param4')
 assert(param:add_param(PARAM_TABLE_KEY, 5,  'M_DS', 20), 'could not add param5')
@@ -153,7 +153,7 @@ function state_vtol()
         c_vtol = 0
     end
 
-    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol','iffffffiiii',2,sinkrate,0,0,alt,0,0,0,0,0,c_vtol)
+    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol','iffffffiiii',2,sinkrate,0,0,0,0,0,0,0,0,c_vtol)
     return state_read, delay
 end
 
