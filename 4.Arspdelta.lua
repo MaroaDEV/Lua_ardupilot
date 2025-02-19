@@ -18,13 +18,18 @@ function state_read()
     asp1 = airspeed:get_raw_airspeed(1)
     aspd = 0.2*(asp1-asp0)+0.8*aspd
 
-    local alt = baro:get_altitude()
+    local hagl = terrain:height_above_terrain(true)
+
+    if hagl == nil then
+        gcs:send_text(0, 'invalid hagl')
+        return state_read, 10000
+    end
     
     if math.abs(aspd) > 2 and alt > 40 and (not quadplane:in_vtol_mode()) then
         gcs:send_text(0, 'ALERT: delta airspeed a1-a0 =' .. aspd)
     end
 
-    if math.abs(aspd) > 5 then
+    if math.abs(aspd) > 8 then
         gcs:send_text(0, 'ALERT: delta airspeed a1-a0 =' .. aspd)
     end
 
