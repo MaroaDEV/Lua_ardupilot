@@ -32,6 +32,8 @@ local port = serial:find_serial(0)
 if not port then
     gcs:send_text(0, "Rockblock: No Scripting Serial Port")
     return
+else
+    gcs:send_text(6, 'Rockblock Script initiated')
 end
 
 port:begin(19200)
