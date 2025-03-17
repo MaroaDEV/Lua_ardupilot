@@ -98,7 +98,6 @@ function find_and_redirect()
                 gcs:send_text(0, "Point de depassement sur l'index " .. i)
                 if prev_index ~= last_index then
                     gcs:send_text(0, "Routage vers l'index " .. prev_index)
-                    mission:set_current_cmd(prev_index)
                 end
                 break
             end
@@ -108,14 +107,18 @@ function find_and_redirect()
         end
     end
 
-    return state_end()
+    calc_alt(prev_index)
+
+    mission:set_current_cmd(prev_index)
+
+    return
 end
 
 
-function state_end()
+function calc_alt(thisindex)
     gcs:send_text(0, "SmartRTL calculation over, alt calculation in progress")
 
-    local current_index = mission:get_current_nav_index()
+    local current_index = thisindex
     local last_index = mission:num_commands() - 1
 
     -- Récupération de la position actuelle du drone
@@ -128,7 +131,7 @@ function state_end()
 
     -- Altitude relative à Home
     local current_alt = vehicle:get_height()
-    local max_slope = math.tan(math.rad(2.5)) -- ≈ 0.0437
+    local max_slope = math.tan(math.rad(3.2)) -- ≈ 0.0437
 
     gcs:send_text(0, "Altitude actuelle (relative): " .. math.floor(current_alt) .. " m")
 
