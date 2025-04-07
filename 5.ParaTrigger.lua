@@ -113,7 +113,7 @@ function state_read()
         return
     end
 
-    if pwm_sum > 4010 and quadplane:in_vtol_mode() then
+    if pwm_sum > 4410 and quadplane:in_vtol_mode() then
         c_motorloss = 0
         c_alt = 0
         c_xt = 0
@@ -121,7 +121,7 @@ function state_read()
     end
 
     -- State CRUISE sinon
-    if pwm_sum < 4010 and not quadplane:in_vtol_mode() and vehicle:get_mode() == 10 then
+    if pwm_sum < 4410 and not quadplane:in_vtol_mode() and vehicle:get_mode() == 10 then
         c_vtol = 0
         return state_cruise()
     end

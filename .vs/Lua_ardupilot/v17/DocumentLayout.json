@@ -106,7 +106,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
@@ -122,6 +122,10 @@
               "IsPinned": true
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "6.Thrmax.lua",
@@ -129,14 +133,10 @@
               "RelativeDocumentMoniker": "6.Thrmax.lua",
               "ToolTip": "C:\\Users\\alexi\\Desktop\\Lua_ardupilot\\6.Thrmax.lua",
               "RelativeToolTip": "6.Thrmax.lua",
-              "ViewState": "AQIAABAAAAAAAAAAAAAIwBcAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABsAAAALAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-04-01T13:31:14.211Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
               "$type": "Document",
@@ -196,8 +196,7 @@
               "RelativeToolTip": "6.SmartRtl.lua",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-02-18T11:26:52.739Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-18T11:26:52.739Z"
             },
             {
               "$type": "Document",
@@ -209,8 +208,7 @@
               "RelativeToolTip": "GroundPara.lua",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-02-07T05:48:03.451Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-07T05:48:03.451Z"
             },
             {
               "$type": "Document",
@@ -318,8 +316,7 @@
               "RelativeToolTip": "3.LATO.lua",
               "ViewState": "AQIAAGoAAAAAAAAAAAAAAGIAAAAfAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-01-21T05:05:58.645Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-21T05:05:58.645Z"
             },
             {
               "$type": "Document",
@@ -331,8 +328,7 @@
               "RelativeToolTip": "2.7sLimitations.lua",
               "ViewState": "AQIAABAAAAAAAAAAAAAIwDcAAAATAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-09-06T06:40:17.726Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-06T06:40:17.726Z"
             },
             {
               "$type": "Document",
