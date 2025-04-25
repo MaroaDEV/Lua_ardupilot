@@ -120,13 +120,9 @@ function state_read()
     end
 
     if c_xt > i_xt_ds then
-        if (hagl > 160) then
-            gcs:send_text(0, 'Parachute : Too high')
-        else
-            gcs:send_text(0, 'Parachute Triggered')
-            para:release()
-            return
-        end    
+        gcs:send_text(0, 'Parachute Triggered')
+        para:release()
+        return 
     end
 
     if pwm_sum > 4010 and quadplane:in_vtol_mode() then
