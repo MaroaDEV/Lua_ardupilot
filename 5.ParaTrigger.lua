@@ -1,3 +1,5 @@
+-- Script ParaTrigger.lua patch 1.1
+
 -- Ce déclenche le parachute dans certains scénarios de vols dégradés
 
 -- Initialisation des variables
