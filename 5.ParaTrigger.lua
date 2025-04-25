@@ -108,9 +108,13 @@ function state_read()
     local pwm_sum = SRV_Channels:get_output_pwm(MOTOR5_FUN) + SRV_Channels:get_output_pwm(MOTOR6_FUN) + SRV_Channels:get_output_pwm(MOTOR7_FUN) + SRV_Channels:get_output_pwm(MOTOR8_FUN)
     
     if c_alt > i_alt_ds or c_motorloss > i_m_ds or c_vtol > i_vtol_ds or c_xt > i_xt_ds then
-        gcs:send_text(0, 'Parachute Triggered')
-        para:release()
-        return
+        if (hagl > 160) then
+            gcs:send_text(0, 'Parachute : Too high')
+        else
+            gcs:send_text(0, 'Parachute Triggered')
+            para:release()
+            return
+        end    
     end
 
     if pwm_sum > 4010 and quadplane:in_vtol_mode() then
