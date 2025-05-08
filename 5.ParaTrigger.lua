@@ -111,7 +111,7 @@ function state_read()
     
     if c_alt > i_alt_ds or c_motorloss > i_m_ds or c_vtol > i_vtol_ds then
         if (hagl > 160) then
-            gcs:send_text(0, 'Parachute : Too high')
+            gcs:send_text(0, 'Parachute waiting : Too high')
         else
             gcs:send_text(0, 'Parachute Triggered')
             para:release()
