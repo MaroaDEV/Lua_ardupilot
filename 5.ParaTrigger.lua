@@ -22,6 +22,10 @@ local c_xt = 0
 local sinkrate = 0
 local c_vtol = 0
 
+local roll = 0
+local pitch = 0
+local c_ang = 0
+
 local MOTOR5_FUN = 33
 local MOTOR6_FUN = 34 
 local MOTOR7_FUN = 35 
@@ -29,7 +33,7 @@ local MOTOR8_FUN = 36
 local SERVO_FUN_FORWARD = 70
 
 local PARAM_TABLE_KEY = 0
-assert(param:add_table(PARAM_TABLE_KEY, "PARA_", 9), 'could not add param table')
+assert(param:add_table(PARAM_TABLE_KEY, "PARA_", 11), 'could not add param table')
 assert(param:add_param(PARAM_TABLE_KEY, 1,  'VTOL_SK', 5.5), 'could not add param1')
 assert(param:add_param(PARAM_TABLE_KEY, 2,  'VTOL_DS', 6), 'could not add param2')
 assert(param:add_param(PARAM_TABLE_KEY, 3,  'M_TH_HIGH', 95), 'could not add param3')
@@ -39,6 +43,8 @@ assert(param:add_param(PARAM_TABLE_KEY, 6,  'ALT_DELTA', 60), 'could not add par
 assert(param:add_param(PARAM_TABLE_KEY, 7,  'ALT_DS', 20), 'could not add param7')
 assert(param:add_param(PARAM_TABLE_KEY, 8,  'XT_M', 2000), 'could not add param8')
 assert(param:add_param(PARAM_TABLE_KEY, 9,  'XT_DS', 20), 'could not add param9')
+assert(param:add_param(PARAM_TABLE_KEY, 10,  'ANG_DEG', 55), 'could not add param10')
+assert(param:add_param(PARAM_TABLE_KEY, 11,  'ENG_DS', 3), 'could not add param11')
 
 local VTOL_SK = Parameter()
 VTOL_SK:init('PARA_VTOL_SK')
@@ -75,6 +81,14 @@ local i_xt_m = XT_M:get()
 local XT_DS = Parameter()
 XT_DS:init('PARA_XT_DS')
 local i_xt_ds = XT_DS:get()
+
+local ANG_DEG = Parameter()
+ANG_DEG:init('PARA_ANG_DEG')
+local i_ang_deg = ANG_DEG:get()
+
+local ANG_DS = Parameter()
+ANG_DS:init('PARA_ANG_DS')
+local i_ang_ds = ANG_DS:get()
 
 -- Fonction d'initialisation
 function state_init()
@@ -151,6 +165,8 @@ function state_vtol()
     delay = 100
     
     local vel = ahrs:get_velocity_NED()
+    pitch = ahrs:get_pitch()
+    roll = ahrs:get_roll()
 
     if vel then
         sinkrate = vel:z()
@@ -165,7 +181,14 @@ function state_vtol()
         c_vtol = 0
     end
 
-    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol','iffffffiiii',2,sinkrate,0,0,0,0,0,0,0,0,c_vtol)
+    if math.abs(pitch) > i_ang_deg or math.abs(roll) > i_ang_deg then
+        c_ang = c_ang + 1
+        delay = 100
+    else 
+        c_ang = 0
+    end
+
+    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol','iffffffiiii',2,sinkrate,pitch,roll,0,0,0,0,0,0,0,0,c_vtol,c_ang)
     return state_read, delay
 end
 
@@ -208,7 +231,7 @@ function state_cruise()
     end
 
     -- logger:write('HE','thr(%),cur(A)','f,f',thr,cur)
-    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol','iffffffiiii',1,0,thr,cur,alt,t_alt,xt,c_motorloss,c_alt,c_xt,0)
+    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol','iffffffiiii',1,0,0,0,thr,cur,alt,t_alt,xt,c_motorloss,c_alt,c_xt,0,0)
     return state_read, delay
 
 end
