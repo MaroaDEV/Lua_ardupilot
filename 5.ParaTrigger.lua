@@ -44,7 +44,7 @@ assert(param:add_param(PARAM_TABLE_KEY, 7,  'ALT_DS', 20), 'could not add param7
 assert(param:add_param(PARAM_TABLE_KEY, 8,  'XT_M', 2000), 'could not add param8')
 assert(param:add_param(PARAM_TABLE_KEY, 9,  'XT_DS', 20), 'could not add param9')
 assert(param:add_param(PARAM_TABLE_KEY, 10,  'ANG_DEG', 55), 'could not add param10')
-assert(param:add_param(PARAM_TABLE_KEY, 11,  'ENG_DS', 3), 'could not add param11')
+assert(param:add_param(PARAM_TABLE_KEY, 11,  'ANG_DS', 3), 'could not add param11')
 
 local VTOL_SK = Parameter()
 VTOL_SK:init('PARA_VTOL_SK')
@@ -123,7 +123,7 @@ function state_read()
     -- State VTOL si pwm_sum > 4010 et si is_flying_vtol
     local pwm_sum = SRV_Channels:get_output_pwm(MOTOR5_FUN) + SRV_Channels:get_output_pwm(MOTOR6_FUN) + SRV_Channels:get_output_pwm(MOTOR7_FUN) + SRV_Channels:get_output_pwm(MOTOR8_FUN)
     
-    if c_alt > i_alt_ds or c_motorloss > i_m_ds or c_vtol > i_vtol_ds then
+    if c_alt > i_alt_ds or c_motorloss > i_m_ds or c_vtol > i_vtol_ds or c_ang > i_ang_ds then
         if (hagl > 160) then
             gcs:send_text(0, 'Parachute waiting : Too high')
         else
@@ -149,6 +149,7 @@ function state_read()
     -- State CRUISE sinon
     if pwm_sum < 4010 and not quadplane:in_vtol_mode() and vehicle:get_mode() == 10 then
         c_vtol = 0
+        c_ang = 0
         return state_cruise()
     end
 
@@ -156,6 +157,7 @@ function state_read()
     c_alt = 0
     c_vtol = 0
     c_xt = 0
+    c_ang = 0
 
     return state_read, 2000
 end
@@ -165,8 +167,8 @@ function state_vtol()
     delay = 100
     
     local vel = ahrs:get_velocity_NED()
-    pitch = ahrs:get_pitch()
-    roll = ahrs:get_roll()
+    pitch = 57.296*ahrs:get_pitch()
+    roll = 57.296*ahrs:get_roll()
 
     if vel then
         sinkrate = vel:z()
@@ -188,7 +190,8 @@ function state_vtol()
         c_ang = 0
     end
 
-    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol','iffffffiiii',2,sinkrate,pitch,roll,0,0,0,0,0,0,0,0,c_vtol,c_ang)
+    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol,c_a','iffffffiiiii',2,sinkrate,0,0,0,0,0,0,0,0,c_vtol,c_ang)
+    logger:write('DEBG','pitch,roll','ff',pitch,roll)
     return state_read, delay
 end
 
@@ -231,7 +234,7 @@ function state_cruise()
     end
 
     -- logger:write('HE','thr(%),cur(A)','f,f',thr,cur)
-    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol','iffffffiiii',1,0,0,0,thr,cur,alt,t_alt,xt,c_motorloss,c_alt,c_xt,0,0)
+    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol,c_a','iffffffffiiiii',1,0,thr,cur,alt,t_alt,xt,c_motorloss,c_alt,c_xt,0,0)
     return state_read, delay
 
 end
