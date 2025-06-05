@@ -190,8 +190,8 @@ function state_vtol()
         c_ang = 0
     end
 
-    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol,c_a','iffffffiiiii',2,sinkrate,0,0,0,0,0,0,0,0,c_vtol,c_ang)
-    logger:write('DEBG','pitch,roll','ff',pitch,roll)
+    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol','iffffffiiii',2,sinkrate,0,0,0,0,0,0,0,0,c_vtol)
+    logger:write('PAR2','pitch,roll,c_ang','ffi',pitch,roll,c_ang)
     return state_read, delay
 end
 
@@ -234,7 +234,8 @@ function state_cruise()
     end
 
     -- logger:write('HE','thr(%),cur(A)','f,f',thr,cur)
-    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol,c_a','iffffffffiiiii',1,0,thr,cur,alt,t_alt,xt,c_motorloss,c_alt,c_xt,0,0)
+    logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol','iffffffiiii',1,0,thr,cur,alt,t_alt,xt,c_motorloss,c_alt,c_xt,0)
+    logger:write('PAR2','pitch,roll,c_ang','ffi',0,0,0)
     return state_read, delay
 
 end
