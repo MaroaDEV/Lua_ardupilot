@@ -16,11 +16,14 @@ local SCR_4 = 97
 
 function state_init()
     gcs:send_text(6, 'g0.ground test ready on input')
-    return state_w8_input, 20000
+    if arming:is_armed() then
+        return state_w8_input, 200
+    end
+    return state_init, 2000
 end
 
 function state_w8_input()
-    notify:play_tune('T120 L8 O5 C C D C F E C C D C G F C C O6 C A F E D A# A F G F')
+    notify:play_tune('T120 O4 L4 G G A G O5C O4B P4 G G A G O5D O4C P4 G G O5G O4E C B A P4 O5F O4F E C D C')
 end
 
 -- Démarrer avec state_init
