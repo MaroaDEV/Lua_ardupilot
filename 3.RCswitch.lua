@@ -15,13 +15,16 @@ local prev_read_6, prev_read_7 = -2, -2
 
 -- Fonction d'initialisation
 function state_init()
-    gcs:send_text(6, '5. RC Switch script initiated')
+    gcs:send_text(6, '3. RC Switch script initiated')
     return state_read, long_delay -- Appel de state_read dans 2 secondes
 end
 
 -- Fonction pour lire les champs
 function state_read()
     if not rc:has_valid_input() then
+        old_state_6 = -1
+        old_state_7 = -1
+        gcs:send_text(MAV_INFO,"invalid")
         return state_read,long_delay
     end
 
@@ -75,18 +78,27 @@ function state_read()
     end
 
     if change7 then
-        if state_6 == 0 then
+        if state_7 == 0 then
             vehicle:set_mode(17) -- mode QSTABILIZE
             gcs:send_text(MAV_INFO,"Switch to QSTABILIZE")
         end
-        if state_6 == 1 then
+        if state_7 == 1 then
             vehicle:set_mode(19) -- mode QLOITER
             gcs:send_text(MAV_INFO,"Switch to QLOITER")
         end
-        if state_6 == 2 then
+        if state_7 == 2 then
             vehicle:set_mode(20) -- mode QLAND
             gcs:send_text(MAV_INFO,"Switch to QLAND")
         end
+        old_state_7 = state_7
+    end
+
+    -- Donc le old est changé que si on change de mode, ou si l'anicen old n'était pas valide et qu'on a une mesure valide
+
+    if old_state_6 < 0 then
+        old_state_6 = state_6
+    end
+    if old_state_7 < 0 then
         old_state_7 = state_7
     end
 
