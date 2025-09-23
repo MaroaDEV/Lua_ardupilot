@@ -106,7 +106,7 @@ function state_read()
         return state_read, 1000
     end
 
-    -- State VTOL si pwm_sum > 4010 et si is_flying_vtol
+    -- State VTOL si pwm_sum > 4410 et si is_flying_vtol
     local pwm_sum = SRV_Channels:get_output_pwm(MOTOR5_FUN) + SRV_Channels:get_output_pwm(MOTOR6_FUN) + SRV_Channels:get_output_pwm(MOTOR7_FUN) + SRV_Channels:get_output_pwm(MOTOR8_FUN)
     
     if c_alt > i_alt_ds or c_motorloss > i_m_ds or c_vtol > i_vtol_ds then
@@ -125,7 +125,7 @@ function state_read()
         return 
     end
 
-    if pwm_sum > 4010 and quadplane:in_vtol_mode() then
+    if pwm_sum > 4410 and quadplane:in_vtol_mode() then
         c_motorloss = 0
         c_alt = 0
         c_xt = 0
@@ -133,7 +133,7 @@ function state_read()
     end
 
     -- State CRUISE sinon
-    if pwm_sum < 4010 and not quadplane:in_vtol_mode() and vehicle:get_mode() == 10 then
+    if pwm_sum < 4410 and not quadplane:in_vtol_mode() and vehicle:get_mode() == 10 then
         c_vtol = 0
         return state_cruise()
     end
