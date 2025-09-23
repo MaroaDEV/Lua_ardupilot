@@ -1,6 +1,6 @@
 -- Ce script permet une limitation dynamique des niveaux de gaz
 
--- Définir les canaux des servos pour les moteurs 5, 6, 7 et 8, l'argument doit être la fonction du servo et non son channel
+-- Dï¿½finir les canaux des servos pour les moteurs 5, 6, 7 et 8, l'argument doit ï¿½tre la fonction du servo et non son channel
 local MOTOR5_FUN = 33
 local MOTOR6_FUN = 34 
 local MOTOR7_FUN = 35 
@@ -11,7 +11,7 @@ local delay_1min = 1*60*1000
 local looper = 10
 local bat_v = 50
 local pwm_max = 2000
-local Q_M_PWM_MAX = Parameter() -- Accède et modifie ce paramètre
+local Q_M_PWM_MAX = Parameter() -- Accï¿½de et modifie ce paramï¿½tre
 Q_M_PWM_MAX:init('Q_M_PWM_MAX')      
 
 
@@ -30,7 +30,7 @@ function state_safe()
    bat_v = battery:voltage(0)
    pwm_max = 2000
    pwm_sum = SRV_Channels:get_output_pwm(MOTOR5_FUN) + SRV_Channels:get_output_pwm(MOTOR6_FUN) + SRV_Channels:get_output_pwm(MOTOR7_FUN) + SRV_Channels:get_output_pwm(MOTOR8_FUN)
-   if quadplane:in_vtol_mode() or pwm_sum > 4010 then 
+   if quadplane:in_vtol_mode() or pwm_sum > 4410 then 
         return state_vtol, delay_1min -- on ne veut pas changer la limitation pendant que l'utilisation des moteurs
    end
    if bat_v > 50.4 then 
@@ -46,11 +46,11 @@ end
 
 function state_vtol()
    pwm_sum = SRV_Channels:get_output_pwm(MOTOR5_FUN) + SRV_Channels:get_output_pwm(MOTOR6_FUN) + SRV_Channels:get_output_pwm(MOTOR7_FUN) + SRV_Channels:get_output_pwm(MOTOR8_FUN)
-   if quadplane:in_vtol_mode() or pwm_sum > 4010 then  
+   if quadplane:in_vtol_mode() or pwm_sum > 4410 then  
         return state_vtol, delay_1min
    end
    return state_safe, delay_1min
 end
 
--- Démarrer avec state_safe
+-- Dï¿½marrer avec state_safe
 return state_init()
