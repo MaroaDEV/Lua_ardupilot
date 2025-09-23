@@ -1,9 +1,9 @@
 -- Script ParaTrigger.lua patch 1.1
 
--- Ce déclenche le parachute dans certains scénarios de vols dégradés
+-- Ce dÃ©clenche le parachute dans certains scÃ©narios de vols dÃ©gradÃ©s
 
 -- Initialisation des variables
-local SERVO_FUNCTION_PARA = 27 -- 27 est assigné au parachute
+local SERVO_FUNCTION_PARA = 27 -- 27 est assignÃ© au parachute
 local SERVO_PARA_CHANNEL = 12
 
 local delay = 2000
@@ -22,10 +22,6 @@ local c_xt = 0
 local sinkrate = 0
 local c_vtol = 0
 
-local roll = 0
-local pitch = 0
-local c_ang = 0
-
 local MOTOR5_FUN = 33
 local MOTOR6_FUN = 34 
 local MOTOR7_FUN = 35 
@@ -33,7 +29,7 @@ local MOTOR8_FUN = 36
 local SERVO_FUN_FORWARD = 70
 
 local PARAM_TABLE_KEY = 0
-assert(param:add_table(PARAM_TABLE_KEY, "PARA_", 11), 'could not add param table')
+assert(param:add_table(PARAM_TABLE_KEY, "PARA_", 9), 'could not add param table')
 assert(param:add_param(PARAM_TABLE_KEY, 1,  'VTOL_SK', 5.5), 'could not add param1')
 assert(param:add_param(PARAM_TABLE_KEY, 2,  'VTOL_DS', 6), 'could not add param2')
 assert(param:add_param(PARAM_TABLE_KEY, 3,  'M_TH_HIGH', 95), 'could not add param3')
@@ -43,8 +39,6 @@ assert(param:add_param(PARAM_TABLE_KEY, 6,  'ALT_DELTA', 60), 'could not add par
 assert(param:add_param(PARAM_TABLE_KEY, 7,  'ALT_DS', 20), 'could not add param7')
 assert(param:add_param(PARAM_TABLE_KEY, 8,  'XT_M', 2000), 'could not add param8')
 assert(param:add_param(PARAM_TABLE_KEY, 9,  'XT_DS', 20), 'could not add param9')
-assert(param:add_param(PARAM_TABLE_KEY, 10,  'ANG_DEG', 55), 'could not add param10')
-assert(param:add_param(PARAM_TABLE_KEY, 11,  'ANG_DS', 3), 'could not add param11')
 
 local VTOL_SK = Parameter()
 VTOL_SK:init('PARA_VTOL_SK')
@@ -82,14 +76,6 @@ local XT_DS = Parameter()
 XT_DS:init('PARA_XT_DS')
 local i_xt_ds = XT_DS:get()
 
-local ANG_DEG = Parameter()
-ANG_DEG:init('PARA_ANG_DEG')
-local i_ang_deg = ANG_DEG:get()
-
-local ANG_DS = Parameter()
-ANG_DS:init('PARA_ANG_DS')
-local i_ang_ds = ANG_DS:get()
-
 -- Fonction d'initialisation
 function state_init()
     gcs:send_text(6, '5. ParaTrigger script initiated')
@@ -123,7 +109,7 @@ function state_read()
     -- State VTOL si pwm_sum > 4010 et si is_flying_vtol
     local pwm_sum = SRV_Channels:get_output_pwm(MOTOR5_FUN) + SRV_Channels:get_output_pwm(MOTOR6_FUN) + SRV_Channels:get_output_pwm(MOTOR7_FUN) + SRV_Channels:get_output_pwm(MOTOR8_FUN)
     
-    if c_alt > i_alt_ds or c_motorloss > i_m_ds or c_vtol > i_vtol_ds or c_ang > i_ang_ds then
+    if c_alt > i_alt_ds or c_motorloss > i_m_ds or c_vtol > i_vtol_ds then
         if (hagl > 160) then
             gcs:send_text(0, 'Parachute waiting : Too high')
         else
@@ -149,7 +135,6 @@ function state_read()
     -- State CRUISE sinon
     if pwm_sum < 4010 and not quadplane:in_vtol_mode() and vehicle:get_mode() == 10 then
         c_vtol = 0
-        c_ang = 0
         return state_cruise()
     end
 
@@ -157,7 +142,6 @@ function state_read()
     c_alt = 0
     c_vtol = 0
     c_xt = 0
-    c_ang = 0
 
     return state_read, 2000
 end
@@ -167,8 +151,6 @@ function state_vtol()
     delay = 100
     
     local vel = ahrs:get_velocity_NED()
-    pitch = 57.296*ahrs:get_pitch()
-    roll = 57.296*ahrs:get_roll()
 
     if vel then
         sinkrate = vel:z()
@@ -183,15 +165,7 @@ function state_vtol()
         c_vtol = 0
     end
 
-    if math.abs(pitch) > i_ang_deg or math.abs(roll) > i_ang_deg then
-        c_ang = c_ang + 1
-        delay = 100
-    else 
-        c_ang = 0
-    end
-
     logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol','iffffffiiii',2,sinkrate,0,0,0,0,0,0,0,0,c_vtol)
-    logger:write('PAR2','pitch,roll,c_ang','ffi',pitch,roll,c_ang)
     return state_read, delay
 end
 
@@ -235,10 +209,9 @@ function state_cruise()
 
     -- logger:write('HE','thr(%),cur(A)','f,f',thr,cur)
     logger:write('PARA','state,sk,thr,cur,alt,t_alt,xt,c_mot,c_alt,c_xt,c_vtol','iffffffiiii',1,0,thr,cur,alt,t_alt,xt,c_motorloss,c_alt,c_xt,0)
-    logger:write('PAR2','pitch,roll,c_ang','ffi',0,0,0)
     return state_read, delay
 
 end
 
--- Démarrer avec l'état d'initialisation
+-- DÃ©marrer avec l'Ã©tat d'initialisation
 return state_init()
