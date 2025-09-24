@@ -10,7 +10,7 @@ local PWM_sum = 0
 local delay_1min = 1*60*1000 
 local looper = 10
 local bat_v = 50
-local pwm_max = 2000
+local pwm_max = 1940
 local Q_M_PWM_MAX = Parameter() -- Acc�de et modifie ce param�tre
 Q_M_PWM_MAX:init('Q_M_PWM_MAX')      
 
@@ -28,16 +28,16 @@ function state_safe()
    looper = 0
    last_state = 0
    bat_v = battery:voltage(0)
-   pwm_max = 2000
+   pwm_max = 1940
    pwm_sum = SRV_Channels:get_output_pwm(MOTOR5_FUN) + SRV_Channels:get_output_pwm(MOTOR6_FUN) + SRV_Channels:get_output_pwm(MOTOR7_FUN) + SRV_Channels:get_output_pwm(MOTOR8_FUN)
    if quadplane:in_vtol_mode() or pwm_sum > 4410 then 
         return state_vtol, delay_1min -- on ne veut pas changer la limitation pendant que l'utilisation des moteurs
    end
    if bat_v > 50.4 then 
-        pwm_max = 1000 + (50.4/bat_v) * 1000
+        pwm_max = 1100 + (50.4/bat_v) * 840
    end
-   if pwm_max < 1857 then
-        pwm_max = 1857
+   if pwm_max < 1820 then
+        pwm_max = 1820
    end
    Q_M_PWM_MAX:set(pwm_max)
    gcs:send_text(6, '2.7SLimitations set '..pwm_max)
