@@ -36,8 +36,8 @@ function state_safe()
    if bat_v > 50.4 then 
         pwm_max = 1100 + (50.4/bat_v) * 840
    end
-   if pwm_max < 1820 then
-        pwm_max = 1820
+   if pwm_max < 1789 then
+        pwm_max = 1789
    end
    Q_M_PWM_MAX:set(pwm_max)
    gcs:send_text(6, '2.7SLimitations set '..pwm_max)

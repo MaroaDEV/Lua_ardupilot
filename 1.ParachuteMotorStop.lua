@@ -5,6 +5,10 @@ local MOTOR5_CHANNEL = 4
 local MOTOR6_CHANNEL = 5  
 local MOTOR7_CHANNEL = 6  
 local MOTOR8_CHANNEL = 7  
+local MOTOR5_CHANNEL = 14
+local MOTOR6_CHANNEL = 15 
+local MOTOR7_CHANNEL = 16  
+local MOTOR8_CHANNEL = 17  
 
 local last_state = 0
 local SERVO_FUNCTION = 27 -- 27 est assign� au parachute
@@ -24,11 +28,15 @@ end
 
 function state_para()
 
-    -- D�finir les valeurs PWM des canaux des servos pour les moteurs 5, 6, 7 et 8 � 0
+    -- Definir les valeurs PWM des canaux des servos pour les moteurs 5, 6, 7 et 8
     SRV_Channels:set_output_pwm_chan_timeout(MOTOR5_CHANNEL, 1000, 700)  
     SRV_Channels:set_output_pwm_chan_timeout(MOTOR6_CHANNEL, 1000, 700)  
     SRV_Channels:set_output_pwm_chan_timeout(MOTOR7_CHANNEL, 1000, 700)  
     SRV_Channels:set_output_pwm_chan_timeout(MOTOR8_CHANNEL, 1000, 700)  
+    SRV_Channels:set_output_pwm_chan_timeout(MOTOR15_CHANNEL, 1000, 700)  
+    SRV_Channels:set_output_pwm_chan_timeout(MOTOR16_CHANNEL, 1000, 700)  
+    SRV_Channels:set_output_pwm_chan_timeout(MOTOR17_CHANNEL, 1000, 700)  
+    SRV_Channels:set_output_pwm_chan_timeout(MOTOR18_CHANNEL, 1000, 700)
 
     if last_state == 0 then
         -- Envoyer un message de confirmation
