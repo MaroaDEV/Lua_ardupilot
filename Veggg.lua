@@ -11,7 +11,7 @@ local Moy_PWM_Quad = 0
 
 
 function state_init()
-  gcs:send_text()
+  gcs:send_text(6,'AAAAAAAAAA')
   return state_compare, 500
 end
 
@@ -20,7 +20,7 @@ function state_compare()
   for i=0 ,  i<=4 , 1 do 
     if SRV_Channels:get_output_pwm(33+i) >= 100 + Moy_PWM_Quad then 
       local sp = (SRV_Channels:get_output_pwm(33+i)/Moy_PWM_Quad)*100
-      gcs:send_text('Le moteur'..4+i.. 'consomme à'..sp..'%')
+      gcs:send_text(6,'Le moteur'..4+i.. 'consomme à'..sp..'%')
     end
   end
   return state_compare, 2000
